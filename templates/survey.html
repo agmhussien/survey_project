@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>استقصاء الدراسة التمويلية</title>
+    <style>
+        @font-face {
+            font-family: 'CustomFont';
+            src: url('https://drive.google.com/uc?export=download&id=1zYa8E8EyhSelNvElut3IWVB31Q4rqNdB') format('woff');
+        }
+        body {
+            font-family: 'CustomFont', Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+            background-color: #0B7B6B4;
+            color: #ffffff;
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #D9AF62;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #D9AF62;
+            border-radius: 10px;
+            background-color: rgba(1, 64, 64, 0.8);
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        .section label {
+            display: block;
+            margin-top: 10px;
+            color: #D9AF62;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #D9AF62;
+            border-radius: 5px;
+            box-sizing: border-box;
+            background-color: #ffffff;
+            color: #000000;
+        }
+        .button {
+            text-align: center;
+            margin-top: 20px;
+        }
+        button {
+            background-color: #D9AF62;
+            color: #014040;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #1E1E34;
+            color: #ffffff;
+            transform: scale(1.05);
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>استقصاء الدراسة التمويلية</h1>
+    </div>
+    <form action="/submit" method="post">
+
+        <div class="section">
+            <h2>1. المعلومات الشخصية</h2>
+            <label>الاسم الكامل:</label>
+            <input type="text" name="full_name" required>
+
+            <label>رقم الهاتف:</label>
+            <input type="tel" name="phone" required>
+
+            <label>البريد الإلكتروني:</label>
+            <input type="email" name="email" required>
+
+            <label>مكان الإقامة:</label>
+            <input type="text" name="location">
+
+            <label>عدد أفراد الأسرة:</label>
+            <input type="number" name="family_members">
+
+            <label>جهة العمل:</label>
+            <input type="text" name="employer">
+
+            <label>الجنسية:</label>
+            <select name="nationality" required>
+                <option value="">اختر...</option>
+                <option value="saudi">سعودي</option>
+                <option value="resident">مقيم</option>
+            </select>
+
+            <label>الدخل الشهري الصافي:</label>
+            <input type="number" name="net_income" placeholder="بالريال السعودي">
+
+            <label>هل أنت مستحق للدعم السكني الحكومي؟</label>
+            <select name="housing_support" required>
+                <option value="">اختر...</option>
+                <option value="yes">نعم</option>
+                <option value="no">لا</option>
+            </select>
+
+            <label>نوع السكن الحالي:</label>
+            <select id="housing-status" name="current_housing_status">
+                <option value="">اختر...</option>
+                <option value="rent">إيجار</option>
+                <option value="own">تمليك</option>
+            </select>
+
+            <div id="rent-details" class="hidden">
+                <label>كم قيمة الإيجار الشهري؟</label>
+                <input type="number" name="monthly_rent" placeholder="بالريال السعودي">
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>2. الخدمات التمويلية</h2>
+            <label>هل يوجد أي قرض قائم طرف جهات تمويلية؟</label>
+            <select id="has-loans" name="existing_loans">
+                <option value="">اختر...</option>
+                <option value="yes">نعم</option>
+                <option value="no">لا</option>
+            </select>
+
+            <div id="loan-count-section" class="hidden">
+                <label>كم عدد الالتزامات القائمة؟</label>
+                <input type="number" id="loan-count" name="loan_count" min="1" max="10">
+            </div>
+
+            <div id="loan-details" class="hidden">
+                <h3>تفاصيل القروض:</h3>
+                <div id="loan-templates"></div>
+            </div>
+
+            <label>هل يوجد أي متأخرات في الالتزامات القائمة؟</label>
+            <select id="has-delinquencies" name="delayed_payments">
+                <option value="">اختر...</option>
+                <option value="yes">نعم</option>
+                <option value="no">لا</option>
+            </select>
+
+            <div id="delinquency-details" class="hidden">
+                <label>هل تتوفر لديك المقدرة المالية حالياً لسداد هذه المتأخرات؟</label>
+                <select name="can_pay_delinquencies">
+                    <option value="">اختر...</option>
+                    <option value="yes">نعم</option>
+                    <option value="no">لا</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>3. التفضيلات والخصائص المطلوبة في العقار</h2>
+            <label>نوع العقار:</label>
+            <select name="property_type" required>
+                <option value="">اختر...</option>
+                <option value="apartment">شقة</option>
+                <option value="villa">فيلا</option>
+                <option value="commercial">تجاري</option>
+            </select>
+
+            <label>المواقع المفضلة:</label>
+            <textarea name="preferred_locations" placeholder="اكتب المواقع المفضلة لديك"></textarea>
+
+            <label>المساحة المطلوبة (تقريبية) (متر مربع):</label>
+            <input type="number" name="approx_space">
+
+            <label>عدد الغرف المطلوبة:</label>
+            <input type="number" name="required_rooms">
+        </div>
+
+        <div class="section">
+            <h2>4. الخدمات الإضافية</h2>
+            <label>اختر الخدمات الإضافية المطلوبة:</label>
+            <div>
+                <input type="checkbox" name="additional_services" value="interior_design"> التصميم الداخلي للعقار.<br>
+                <input type="checkbox" name="additional_services" value="furnishing"> توفير أثاث العقار.<br>
+                <input type="checkbox" name="additional_services" value="property_rental"> إدارة الأملاك (إيجار فقط).<br>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>5. الملاحظات الإضافية</h2>
+            <label>يرجى إضافة أي ملاحظات أو متطلبات أخرى:</label>
+            <textarea name="additional_notes" placeholder="اكتب ملاحظاتك هنا"></textarea>
+        </div>
+
+        <div class="button">
+            <button type="submit">إرسال</button>
+        </div>
+    </form>
+
+    <script>
+        document.getElementById("housing-status").addEventListener("change", function() {
+            const rentDetails = document.getElementById("rent-details");
+            rentDetails.classList.toggle("hidden", this.value !== "rent");
+        });
+
+        document.getElementById("has-loans").addEventListener("change", function() {
+            const loanCountSection = document.getElementById("loan-count-section");
+            loanCountSection.classList.toggle("hidden", this.value !== "yes");
+        });
+
+        document.getElementById("loan-count").addEventListener("input", function() {
+            const loanDetails = document.getElementById("loan-details");
+            const loanTemplates = document.getElementById("loan-templates");
+            loanTemplates.innerHTML = "";
+            const count = parseInt(this.value, 10) || 0;
+            for (let i = 1; i <= count; i++) {
+                loanTemplates.innerHTML += `
+                    <div class="loan">
+                        <h4>التزام ${i}</h4>
+                        <label>القسط:</label>
+                        <input type="number" name="loan_${i}_installment">
+
+                        <label>الجهة التمويلية:</label>
+                        <input type="text" name="loan_${i}_bank">
+
+                        <label>الفترة المتبقية:</label>
+                        <input type="number" name="loan_${i}_duration">
+
+                        <label>المديونية المتبقية:</label>
+                        <input type="number" name="loan_${i}_balance">
+                    </div>
+                `;
+            }
+            loanDetails.classList.toggle("hidden", count === 0);
+        });
+
+        document.getElementById("has-delinquencies").addEventListener("change", function() {
+            const delinquencyDetails = document.getElementById("delinquency-details");
+            delinquencyDetails.classList.toggle("hidden", this.value !== "yes");
+        });
+    </script>
+</body>
+</html>
