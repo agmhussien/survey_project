@@ -41,9 +41,9 @@ def submit():
 if __name__ == '__main__':
     init_db()
     app.run(debug=True)
+
 import os
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))  # Render يستخدم متغير البيئة PORT
-    app.run(host='0.0.0.0', port=port)        # تشغيل التطبيق على 0.0.0.0
-
+    port = int(os.environ.get('PORT', 5000))  # استخدام المنفذ الذي توفره Render
+    app.run(host='0.0.0.0', port=port)        # تشغيل التطبيق على 0.0.0.0 والمنفذ الصحيح
